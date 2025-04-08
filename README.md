@@ -42,6 +42,18 @@ REDIS_PORT=6379
 
 docker-compose up --build
 
+This will start the following containers:
+
+    redis: For job queue and results storage
+
+    zookeeper & kafka: Messaging system
+
+    kafka_to_redis_bridge: Bridges Kafka to Redis
+
+    scrapy_worker: Scrapy spider reading from Redis
+
+    fastapi: API server (docs available at http://localhost:8000/docs)
+
 API Usage
 1. Crawl a Domain
 

@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  fastapi:
+    build: .
+    depends_on:
+      - kafka
+    ports:
+      - "8000:8000"
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  scrapy_worker:
+    build:
+      context: ./scrapy_cluster
+    depends_on:
+      - kafka
+      - redis
+    environment:
+      KAFKA_HOSTS: kafka:9092
+      REDIS_HOST: redis
+      TOPIC_PREFIX: crawl
+    command: scrapy runspider crawl/spiders/product_spider.py
+
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"

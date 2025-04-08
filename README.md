@@ -1,4 +1,4 @@
-Product Crawler
+# Product Crawler
 
 A scalable e-commerce crawler that collects product URLs from domains using Kafka, Redis, Scrapy, and FastAPI.
 

@@ -40,7 +40,7 @@ class ProductSpider(RedisSpider):
         job_id = response.meta.get("job_id") or "default"
         limit = response.meta.get("limit", 50)
         redis_key = f"result:{job_id}"
-        product_patterns = ["/product", "/products", "/p-", "/p/"]
+        product_patterns = ["/product", "/products", "/p-", "/p/", '/item-', '/items-', '/item/']
 
         self.logger.info(f"Parsing: {response.url} for job_id: {job_id}")
 

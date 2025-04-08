@@ -1,4 +1,5 @@
 import scrapy
+from scrapy.exceptions import CloseSpider
 import json
 from urllib.parse import urlparse, urlunparse
 from scrapy.linkextractors import LinkExtractor
